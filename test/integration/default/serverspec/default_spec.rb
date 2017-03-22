@@ -49,6 +49,8 @@ end
 
 describe docker_container('nginx') do
   it { should be_running }
+  its(['HostConfig.RestartPolicy.Name']) { should eq 'always' }
+  its(['HostConfig.RestartPolicy.MaximumRetryCount']) { should eq 0 }
 end
 
 describe command("curl -s http://localhost:8500/v1/catalog/services | jq '.' | grep jenkins") do

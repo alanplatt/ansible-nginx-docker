@@ -17,5 +17,7 @@ platforms:
 suites:
   - name: default
     driver:
+      customize:
+        memory: 1024
       network:
         - ["private_network", { ip: "172.29.129.171" }]

@@ -49,13 +49,15 @@ end
 
 describe docker_container('nginx') do
   it { should be_running }
+  its(['HostConfig.RestartPolicy.Name']) { should eq 'always' }
+  its(['HostConfig.RestartPolicy.MaximumRetryCount']) { should eq 0 }
 end
 
 describe command("curl -s http://localhost:8500/v1/catalog/services | jq '.' | grep jenkins") do
   its(:exit_status) { should eq 0 }
 end
 
-describe command('curl -s -o /dev/null -w "%{http_code}" http://10.0.2.15/jenkins/') do
+describe command('curl -s -o /dev/null -w "%{http_code}" http://localhost/jenkins/') do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should match '200' }
 end

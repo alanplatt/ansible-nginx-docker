@@ -1,0 +1,33 @@
+{% raw %}{{{% endraw %}if service "{{ nginx_docker_service_name }}" "any" {% raw %}}}{% endraw %}
+
+server {
+  listen 80;
+  server_name {{ nginx_docker_service_name }};
+
+{% if nginx_docker_proxy_cache_path_enable|bool and nginx_docker_location_proxy_cache_enable|bool %}
+  # Enable Caching
+  proxy_cache svc_cache;
+{% for directive in nginx_docker_location_proxy_cache_directives %}
+{% if not 'proxy_cache' in directive.split(' ') %}
+  {{ directive }}
+{% endif %}
+{% endfor %}
+
+{% endif -%}
+
+  location / {
+    # Proxy the request
+    proxy_pass http://{{ nginx_docker_service_name }};
+    proxy_pass_header Server;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Host $host;
+  }
+}
+{% raw %}{{{% endraw %}else{% raw %}}}{% endraw %}
+
+# No service object found for {{ nginx_docker_service_name }}
+{% raw %}{{{% endraw %}end{% raw %}}}{% endraw %}

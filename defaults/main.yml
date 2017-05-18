@@ -44,6 +44,9 @@ nginx_docker_templates:
   include:
     conf:  "{{ nginx_docker_conf_dir }}/includes/{{ nginx_docker_conf_name }}/{{ nginx_docker_service_name }}.conf"
     ctmpl: "{{ nginx_docker_conf_dir }}/templates/{{ nginx_docker_service_name }}-include.conf.ctmpl"
+  server:
+    conf:  "{{ nginx_docker_conf_dir }}/servers/{{ nginx_docker_service_name }}.conf"
+    ctmpl: "{{ nginx_docker_conf_dir }}/templates/{{ nginx_docker_service_name }}-server.conf.ctmpl"
   upstream:
     conf:  "{{ nginx_docker_conf_dir }}/upstreams/{{ nginx_docker_service_name }}.conf"
     ctmpl: "{{ nginx_docker_conf_dir }}/templates/{{ nginx_docker_service_name }}-upstream.conf.ctmpl"
